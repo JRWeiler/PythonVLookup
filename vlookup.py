@@ -5,8 +5,8 @@ output = []
 
 def buildArray(filename, array):
     rowArray = []
-    with open(filename, 'r') as csvFile:
-        csvReader = csv.reader(csvFile, delimiter = ' ', quotechar = '|')
+    with open(filename, 'r') as csvInput:
+        csvReader = csv.reader(csvInput, delimiter = ' ', quotechar = '|')
         for row in csvReader:
             rowArray = ', '.join(row).split(',')
             array.append(rowArray)
@@ -14,9 +14,11 @@ def buildArray(filename, array):
 buildArray('yesterday.csv', yRecords)
 buildArray('today.csv', tRecords)
 
-for yRecord in yRecords:
-    for tRecord in tRecords:
-        if yRecord[0] == tRecord[0]:
-            output.append(yRecord[0] + "," + yRecord[1] + "," + tRecord[1])
+with open('output.csv', 'wb') as csvOutput:
+    csvWriter = csv.writer(csvOutput, delimiter = ' ', quotechar = '|', quoting = csv.QUOTE_MINIMAL)
+    for yRecord in yRecords:
+        for tRecord in tRecords:
+            if yRecord[0] == tRecord[0]:
+                csvWriter.writerow([yRecord[0]+','+yRecord[1]+','+tRecord[1]])
 
-print output
+
